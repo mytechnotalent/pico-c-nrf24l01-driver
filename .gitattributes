@@ -1,0 +1,5 @@
+*.c linguist-detectable=true
+*.cpp linguist-detectable=false
+*.makefile linguist-detectable=false
+*.cmake linguist-detectable=false
+*.txt linguist-detectable=false
