@@ -8,8 +8,7 @@
 A Raspberry Pi Pico NRF24L01 driver written in C.
 
 # Usage
-#### If the `SEND_FLAG 0` configuration within `main.c` exists the demo will be set for receive mode and if `SEND_FLAG 1`
-exists the demo will be set for transmit mode.  The configuration exists within `nrf24l01_pins.h`.
+#### If the `SEND_FLAG 0` configuration within `main.c` exists the demo will be set for receive mode and if `SEND_FLAG 1` exists the demo will be set for transmit mode.  The configuration exists within `nrf24l01_pins.h`.
 
 # `main.c`
 ```c
