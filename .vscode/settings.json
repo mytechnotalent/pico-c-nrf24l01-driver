@@ -29,5 +29,5 @@
         "spi.h": "c",
         "pins.h": "c"
     },
-    "cortex-debug.variableUseNaturalFormat": true
+    "cortex-debug.variableUseNaturalFormat": false
 }

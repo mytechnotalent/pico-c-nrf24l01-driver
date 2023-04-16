@@ -46,7 +46,7 @@
 #define CE      15
 #define CSN     9
 #define CLK     10
-#define TX      11
-#define RX      12
+#define TX      11 // MOSI
+#define RX      12 // MISO
 
 #endif /* _NRF24L01_PINS_H_ */

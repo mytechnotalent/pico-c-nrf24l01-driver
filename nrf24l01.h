@@ -78,6 +78,16 @@ typedef struct {
     uint16_t rx;        /**< Pin assignment for the RX [MISO] pin on the Raspberry Pi Pico board. */
 } nrf24l01_config_t;
 
+/** @brief Two variables to indicate the readiness of NRF24L01 module for transmission
+ *         and reception.
+ * 
+ * These two variables are used to indicate the readiness of the NRF24L01 module for transmission 
+ * and reception respectively. The default value for both variables is 1, indicating that the 
+ * module is ready to transmit or receive data.
+*/
+static uint32_t nrf_tx_ready = 1;
+static uint32_t nrf_rx_ready = 1;
+
 /**
  * @brief Function to set the CSN pin low.
  *
@@ -271,7 +281,21 @@ void nrf24l01_set_mode_rx();
 */
 void nrf24l01_send_msg(uint8_t *data, uint8_t size);
 
-/** @brief Receive a message from the NRF24L01 transceiver.
+/** @brief Function to send a message using the NRF24L01 module using the interrupt-based approach.
+ * 
+ * This function sends a message of the given size via the NRF24L01 module using the 
+ * interrupt-based approach.  The message is sent using the NRF24L01's built-in hardware 
+ * SPI interface.  This function blocks until the entire message has been sent.
+ * If successful, the function returns 0, otherwise it returns a non-zero error code.
+ * 
+ * @param[in] data Pointer to the buffer containing the message to be sent.
+ * @param[in] size The size of the message to be sent.
+ * 
+ * @return Returns 0 on success, otherwise a non-zero error code.
+*/
+uint8_t nrf24l01_send_msg_int(uint8_t *data, uint8_t size);
+
+/** @brief Function to receive a message from the NRF24L01 transceiver.
  * 
  * This function receives a message from the NRF24L01 transceiver and stores it in the provided 
  * data buffer.  The maximum size of the data buffer is 32 bytes, and the size parameter 
@@ -283,8 +307,42 @@ void nrf24l01_send_msg(uint8_t *data, uint8_t size);
 */
 void nrf24l01_recv_msg(uint8_t *data, uint8_t size);
 
+/** @brief Function to receive a message using the NRF24L01 module using the interrupt-based
+ *         approach.
+ * 
+ * This function receives a message of up to size bytes from the NRF24L01 module and stores
+ * it in the buffer data.  If there is no message available to be received, this function 
+ * returns 0. Otherwise, it returns the number of bytes received. If the size of the received
+ * message is greater than size, the excess bytes will be discarded.
+ * 
+ * @param data Pointer to a buffer to store the received message.
+ * @param size The maximum size of the message to receive.
+ * 
+ * @return The number of bytes received, or 0 if there is no message available.
+*/
+uint8_t nrf24l01_recv_msg_int(uint8_t *data, uint8_t size);
+
+/** @brief Function to end the transmission and set the TX ready flag to 1.
+ * 
+ * This function lowers the CE pin to end the transmission and sets the nrf_tx_ready 
+ * flag to 1, indicating that the NRF24L01 module is ready to transmit again.
+*/
+void nrf24l01_end_of_transmission();
+
+/** @brief Function to handle interrupts from the NRF24L01 module.
+ * 
+ * This function is called when an interrupt event occurs on the specified GPIO pin.
+ * It handles the interrupt by reading the status register of the NRF24L01 module and
+ * determining the cause of the interrupt. The appropriate action is then taken based
+ * on the interrupt cause.
+ * 
+ * @param gpio The GPIO pin number that is associated with the interrupt.
+ * @param events The interrupt event that has occurred on the GPIO pin.
+*/
+void nrf24l01_int(uint gpio, uint32_t events);
+
 /**
- * @brief Check if a new message has been received by the NRF24L01 module.
+ * @brief Function to check if a new message has been received by the NRF24L01 module.
  * 
  * This function reads the status register of the NRF24L01 module and checks if a new 
  * message has been received.  It returns a boolean value indicating whether a new message 

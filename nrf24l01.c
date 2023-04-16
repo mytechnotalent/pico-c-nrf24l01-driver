@@ -197,6 +197,25 @@ void nrf24l01_send_msg(uint8_t *data, uint8_t size)
     nrf24l01_write_reg(NRF24L01_STATUS, 0b00110000); // p55 
 }
 
+uint8_t nrf24l01_send_msg_int(uint8_t *data, uint8_t size)
+{
+    if(nrf_tx_ready == 0) return 0;
+    nrf_tx_ready = 0;
+    size =  size > 32 ? 32 : size;
+    uint8_t tx_payload = NRF24L01_W_TX_PAYLOAD; // p46
+    uint8_t status = nrf24l01_read_reg(NRF24L01_STATUS); // p55
+    if(status & 1)
+    {
+        nrf24l01_flush_tx();
+    }
+    nrf24l01_csn_low();
+    spi_write_blocking(nrf24l01_config.port, &tx_payload, 1);
+    spi_write_blocking(nrf24l01_config.port, data, size);
+    nrf24l01_csn_high();
+    nrf24l01_ce_high();
+    return 1;
+}
+
 void nrf24l01_recv_msg(uint8_t *data, uint8_t size)
 {
     size = size > 32 ? 32 : size;
@@ -206,6 +225,42 @@ void nrf24l01_recv_msg(uint8_t *data, uint8_t size)
     spi_write_blocking(nrf24l01_config.port, &rx_payload, 1);
     spi_read_blocking(nrf24l01_config.port, 0xff,(uint8_t*)data, size);
     nrf24l01_csn_high();
+}
+
+uint8_t nrf24l01_recv_msg_int(uint8_t *data, uint8_t size)
+{
+    if( nrf_rx_ready == 0) return 0;
+    size =  size > 32 ? 32 : size;
+    uint8_t rx_payload = NRF24L01_R_RX_PAYLOAD; // p46
+    nrf24l01_csn_low();
+    spi_write_blocking(nrf24l01_config.port, &rx_payload, 1);
+    spi_read_blocking(nrf24l01_config.port, 0xff, (uint8_t*)data, size);
+    nrf24l01_csn_high();
+    nrf_rx_ready = 0;
+    nrf24l01_write_reg(NRF24L01_STATUS, 0b01000000); // p55
+    nrf24l01_flush_rx();
+    return 1;
+}
+
+void nrf24l01_end_of_transmission()
+{
+    nrf24l01_ce_low();
+    nrf_tx_ready = 1;
+}
+
+void nrf24l01_int(uint gpio, uint32_t events)
+{
+    uint8_t status = nrf24l01_read_reg(NRF24L01_STATUS); // p55
+    if(status & 0b00100000)
+    {
+        nrf24l01_write_reg(NRF24L01_STATUS, 0b01000000); // p55  
+        nrf24l01_end_of_transmission();
+    }
+    if(status & 0b01000000)
+    {
+        nrf_rx_ready = 1;
+        nrf24l01_write_reg(NRF24L01_STATUS, 0b01000000); // p55
+    }
 }
 
 uint8_t nrf24l01_new_msg()
