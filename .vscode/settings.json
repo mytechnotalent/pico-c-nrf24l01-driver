@@ -27,7 +27,8 @@
     "files.associations": {
         "stdlib.h": "c",
         "spi.h": "c",
-        "pins.h": "c"
+        "pins.h": "c",
+        "nrf24l01.h": "c"
     },
     "cortex-debug.variableUseNaturalFormat": false
 }

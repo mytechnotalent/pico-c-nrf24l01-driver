@@ -201,7 +201,7 @@ uint8_t nrf24l01_send_msg_int(uint8_t *data, uint8_t size)
 {
     if(nrf_tx_ready == 0) return 0;
     nrf_tx_ready = 0;
-    size =  size > 32 ? 32 : size;
+    size = size > 32 ? 32 : size;
     uint8_t tx_payload = NRF24L01_W_TX_PAYLOAD; // p46
     uint8_t status = nrf24l01_read_reg(NRF24L01_STATUS); // p55
     if(status & 1)
@@ -253,7 +253,7 @@ void nrf24l01_int(uint gpio, uint32_t events)
     uint8_t status = nrf24l01_read_reg(NRF24L01_STATUS); // p55
     if(status & 0b00100000)
     {
-        nrf24l01_write_reg(NRF24L01_STATUS, 0b01000000); // p55  
+        nrf24l01_write_reg(NRF24L01_STATUS, 0b00100000); // p55  
         nrf24l01_end_of_transmission();
     }
     if(status & 0b01000000)

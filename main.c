@@ -29,9 +29,9 @@
 #include "nrf24l01.h"
 
 #define SEND_FLAG 0 // change to 1 to run the program in send mode
-#define SEND_FLAG_INT 1 // change to 1 to run the program in send int mode
+#define SEND_FLAG_INT 0 // change to 1 to run the program in send int mode
 #define RECV_FLAG 0 // change to 1 to run the program in recv mode
-#define RECV_FLAG_INT 0 // change to 1 to run the program in recv int mode
+#define RECV_FLAG_INT 1 // change to 1 to run the program in recv int mode
 #define LED 25
 
 int main()
