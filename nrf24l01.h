@@ -126,9 +126,9 @@ static void nrf24l01_ce_high();
  * This function sends a read command to the NRF24L01 module to read the value
  * of the specified register. It uses SPI to communicate with the module.
  * 
- * @param reg   The register address to read.
+ * @param reg The register address to read.
  * 
- * @return      The value read from the register.
+ * @return    The value read from the register.
 */
 static uint8_t nrf24l01_read_reg(uint8_t reg);
 
@@ -138,7 +138,7 @@ static uint8_t nrf24l01_read_reg(uint8_t reg);
  * This function sends a command to the NRF24L01 module. It uses SPI to
  * communicate with the module.
  * 
- * @param cmd   The command to write.
+ * @param cmd The command to write.
 */
 static void nrf24l01_write_cmd(uint8_t cmd);
 
@@ -173,8 +173,8 @@ static void nrf24l01_flush_tx();
  *       have been initialized and configured correctly before calling this function.
  *       This function also assumes that the module is in a ready state to receive data.
  * 
- * @param reg   The register address to write to.
- * @param byte  The value to write to the specified register.
+ * @param reg  The register address to write to.
+ * @param byte The value to write to the specified register.
 */
 static void nrf24l01_write_reg(uint8_t reg, uint8_t byte);
 
@@ -194,9 +194,9 @@ static void nrf24l01_write_reg(uint8_t reg, uint8_t byte);
  *       have been initialized and configured correctly before calling this function.
  *       This function also assumes that the module is in a ready state to receive data.
  * 
- * @param reg   The register address to write to.
- * @param data  Pointer to the array of bytes to write to the register.
- * @param size  The number of bytes to write.
+ * @param reg  The register address to write to.
+ * @param data Pointer to the array of bytes to write to the register.
+ * @param size The number of bytes to write.
 */
 static void nrf24l01_write_data(uint8_t reg, uint8_t *data, uint8_t size);
 
@@ -288,8 +288,8 @@ void nrf24l01_send_msg(uint8_t *data, uint8_t size);
  * SPI interface.  This function blocks until the entire message has been sent.
  * If successful, the function returns 0, otherwise it returns a non-zero error code.
  * 
- * @param[in] data Pointer to the buffer containing the message to be sent.
- * @param[in] size The size of the message to be sent.
+ * @param  data Pointer to the buffer containing the message to be sent.
+ * @param  size The size of the message to be sent.
  * 
  * @return Returns 0 on success, otherwise a non-zero error code.
 */
@@ -301,9 +301,9 @@ uint8_t nrf24l01_send_msg_int(uint8_t *data, uint8_t size);
  * data buffer.  The maximum size of the data buffer is 32 bytes, and the size parameter 
  * is used to determine the actual size of the message received.
  * 
- * @param data  Pointer to the buffer where the received message will be stored.
- * @param size  The expected size of the message to be received. The actual size of 
- *              the message may be smaller or equal to this value.
+ * @param data Pointer to the buffer where the received message will be stored.
+ * @param size The expected size of the message to be received. The actual size of 
+ *             the message may be smaller or equal to this value.
 */
 void nrf24l01_recv_msg(uint8_t *data, uint8_t size);
 
@@ -315,8 +315,8 @@ void nrf24l01_recv_msg(uint8_t *data, uint8_t size);
  * returns 0. Otherwise, it returns the number of bytes received. If the size of the received
  * message is greater than size, the excess bytes will be discarded.
  * 
- * @param data Pointer to a buffer to store the received message.
- * @param size The maximum size of the message to receive.
+ * @param  data Pointer to a buffer to store the received message.
+ * @param  size The maximum size of the message to receive.
  * 
  * @return The number of bytes received, or 0 if there is no message available.
 */
@@ -336,7 +336,7 @@ void nrf24l01_end_of_transmission();
  * determining the cause of the interrupt. The appropriate action is then taken based
  * on the interrupt cause.
  * 
- * @param gpio The GPIO pin number that is associated with the interrupt.
+ * @param gpio   The GPIO pin number that is associated with the interrupt.
  * @param events The interrupt event that has occurred on the GPIO pin.
 */
 void nrf24l01_int(uint gpio, uint32_t events);
