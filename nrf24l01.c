@@ -126,7 +126,7 @@ static void nrf24l01_flush_tx()
 
 static void nrf24l01_write_reg(uint8_t reg, uint8_t byte)
 {
-    reg  = NRF24L01_W_REGISTER | (NRF24L01_R_REGISTER & reg); // p46
+    reg = NRF24L01_W_REGISTER | (NRF24L01_R_REGISTER & reg); // p46
     nrf24l01_csn_low();
     spi_write_blocking(nrf24l01_config.port, &reg, 1);
     spi_write_blocking(nrf24l01_config.port, (uint8_t *)&byte, 1);
@@ -135,7 +135,7 @@ static void nrf24l01_write_reg(uint8_t reg, uint8_t byte)
 
 static void nrf24l01_write_data(uint8_t reg, uint8_t *data, uint8_t size)
 {
-    reg  = NRF24L01_W_REGISTER | (NRF24L01_R_REGISTER & reg); // p46
+    reg = NRF24L01_W_REGISTER | (NRF24L01_R_REGISTER & reg); // p46
     nrf24l01_csn_low();
     spi_write_blocking(nrf24l01_config.port, &reg, 1);
     spi_write_blocking(nrf24l01_config.port, (uint8_t*)data, size);
@@ -166,7 +166,7 @@ void nrf24l01_set_mode_tx()
     nrf24l01_init &= ~(1);
     nrf24l01_write_reg(NRF24L01_CONFIG, nrf24l01_init); // p53
     nrf24l01_ce_low();
-    sleep_us(130); // p20 TX Setting 130 us
+    sleep_us(130); // p20
 }
 
 void nrf24l01_set_mode_rx()
@@ -175,7 +175,7 @@ void nrf24l01_set_mode_rx()
     nrf24l01_init |= 1;
     nrf24l01_write_reg(NRF24L01_CONFIG, nrf24l01_init); // p53
     nrf24l01_ce_high();
-    sleep_us(130); // p20 RX Setting 130 us
+    sleep_us(130); // p20
 }
 
 void nrf24l01_send_msg(uint8_t *data, uint8_t size)
@@ -223,7 +223,7 @@ void nrf24l01_recv_msg(uint8_t *data, uint8_t size)
     nrf24l01_write_reg(NRF24L01_STATUS , 0b01000000); // p55
     nrf24l01_csn_low();
     spi_write_blocking(nrf24l01_config.port, &rx_payload, 1);
-    spi_read_blocking(nrf24l01_config.port, 0xff,(uint8_t*)data, size);
+    spi_read_blocking(nrf24l01_config.port, 0xff, (uint8_t*)data, size);
     nrf24l01_csn_high();
 }
 
